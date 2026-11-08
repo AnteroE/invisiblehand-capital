@@ -1,0 +1,9 @@
+.DS_Store
+
+# Local-only. This repo is public and serves GitHub Pages, so it tracks
+# nothing beyond the three files the site actually sends to a visitor.
+# The ASCII pipeline, the source logo and the project notes stay on disk.
+tools/
+assets/
+.claude/
+README.md

@@ -1,0 +1,278 @@
+/* Invisible Hand Capital
+   One typeface, two colours, a lot of paper. Everything else is restraint. */
+
+:root {
+  --ink: #111111;
+  --paper: #ffffff;
+  --muted: #767676;
+  --faint: #a6a6a6;
+  --rule: #e6e6e6;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
+          "Liberation Mono", monospace;
+  --gutter: clamp(1.5rem, 5vw, 4rem);
+  --measure: clamp(64rem, 84vw, 88rem);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: clamp(13px, 1.05vw, 17px);
+  line-height: 1.75;
+  font-variant-ligatures: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.wrap {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+/* --- shared type -------------------------------------------------------- */
+
+.label {
+  font-size: clamp(10px, 0.72vw, 12.5px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.lede {
+  font-size: clamp(15px, 1.25vw, 20px);
+  line-height: 1.85;
+  max-width: 54em;
+  margin: 0;
+}
+
+/* .lede zeroes the default paragraph margin, so consecutive ledes need their
+   own separation or they run together as one block. */
+.lede + .lede { margin-top: 1.3em; }
+
+p { margin: 0 0 1.2em; }
+p:last-child { margin-bottom: 0; }
+
+/* --- masthead ----------------------------------------------------------- */
+
+.masthead {
+  padding-block: 2.25rem 0;
+  text-align: center;
+}
+
+.mark {
+  font-size: clamp(11px, 0.85vw, 15px);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  display: inline-block;
+  text-indent: 0.42em;  /* letter-spacing adds a trailing gap; re-centre it */
+}
+
+.mark b { font-weight: 600; }
+
+/* The one-line descriptor under the wordmark, typed out by hand.js. Hidden
+   until the script reveals it (or immediately, without the script). */
+.typewriter-text {
+  margin: 1.1rem auto 0;
+  max-width: 40rem;
+  padding-inline: var(--gutter);
+  font-size: clamp(11px, 0.8vw, 14px);
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  min-height: 1.75em;
+  visibility: hidden;
+}
+
+@media (scripting: none) { .typewriter-text { visibility: visible; } }
+
+/* --- the hand ----------------------------------------------------------- */
+/* Same recipe as dao5's frog container: a centred block of preformatted
+   monospace text, one <span> per character, sized by the viewport so the
+   150-column art never reflows. */
+
+.body-hand { padding-block: clamp(1.5rem, 5vw, 3.5rem) 0; }
+
+.hand {
+  /* Shrink-wrap to the longest line, then centre the whole block. A fixed
+     900px box would leave the art left-aligned inside it, since the lines are
+     preformatted and narrower than the box. Centring the text instead is not
+     an option: `text-align: center` would centre each line independently and
+     shear the drawing apart. */
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  background: var(--paper);
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: var(--mono);
+  /* Fixed, in two steps: one size for laptops and desktops, a smaller one for
+     phones (set in the media query below). The drawing is a fixed-size object
+     at each, so dragging the window never resizes it. A viewport too narrow to
+     show it whole pans it sideways rather than shrinking or clipping it. */
+  font-size: 9px;
+  line-height: 1.2;
+  white-space: pre;
+  letter-spacing: 0;
+  color: var(--ink);
+  user-select: text;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;   /* panning the art must not swipe back */
+}
+
+.hand .char {
+  display: inline;
+  will-change: color, contents;
+}
+
+/* The phone size, chosen so 138 columns fit across a typical handset without
+   panning. The breakpoint is the one the rest of the layout already uses. */
+@media (max-width: 40rem) {
+  .hand {
+    font-size: 4px;
+    padding: 12px;
+  }
+}
+
+/* --- sections ----------------------------------------------------------- */
+
+.section {
+  padding-block: clamp(3.5rem, 9vw, 6.5rem);
+  border-top: 1px solid var(--rule);
+}
+
+.section:first-of-type { border-top: 0; }
+
+.section-head {
+  display: grid;
+  grid-template-columns: clamp(8rem, 11vw, 13rem) 1fr;
+  gap: 0 2rem;
+  align-items: baseline;
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: clamp(15px, 1.25vw, 20px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.section-body {
+  margin-top: 2.25rem;
+  display: grid;
+  grid-template-columns: clamp(8rem, 11vw, 13rem) 1fr;
+  gap: 0 2rem;
+}
+
+/* Everything in the body sits in the wide column; the narrow one is the
+   label gutter. Without this, a section with two children would drop its
+   first one into the gutter. */
+.section-body > * { grid-column: 2; }
+
+/* --- item lists --------------------------------------------------------- */
+
+.items { list-style: none; margin: 0; padding: 0; }
+
+.items li {
+  display: grid;
+  grid-template-columns: 1.75rem clamp(11rem, 13vw, 15rem) 1fr;
+  gap: 0 1.5rem;
+  padding-block: 1.15rem;
+  border-top: 1px solid var(--rule);
+  align-items: baseline;
+}
+
+.items li:first-child { border-top: 0; padding-top: 0; }
+
+.items .idx { color: var(--faint); font-size: 10px; letter-spacing: 0.1em; }
+.items .name { font-weight: 600; }
+.items .desc { color: var(--muted); }
+
+/* --- pull quote --------------------------------------------------------- */
+
+.quote {
+  margin: 0 0 2.25rem;
+  padding-left: 1.75rem;
+  border-left: 1px solid var(--ink);
+  max-width: 50em;
+}
+
+.quote p {
+  margin: 0 0 1rem;
+  font-size: clamp(15px, 1.25vw, 20px);
+  line-height: 1.8;
+}
+
+.quote cite {
+  font-style: normal;
+  font-size: clamp(10px, 0.72vw, 12.5px);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* --- careers / contact -------------------------------------------------- */
+
+.roles {
+  list-style: none;
+  margin: 2rem 0;
+  padding: 0;
+  columns: 2;
+  column-gap: 2rem;
+}
+
+.roles li {
+  break-inside: avoid;
+  padding-block: 0.4rem;
+  color: var(--muted);
+}
+
+.roles li::before { content: "\2014"; margin-right: 0.75rem; color: var(--faint); }
+
+.link {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 1px;
+  transition: border-color 0.15s;
+}
+
+.link:hover, .link:focus-visible { border-color: var(--ink); }
+
+/* --- footer ------------------------------------------------------------- */
+
+.footer {
+  border-top: 1px solid var(--rule);
+  padding-block: 2.5rem 3.5rem;
+  color: var(--faint);
+  font-size: clamp(10px, 0.68vw, 12.5px);
+  letter-spacing: 0.06em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+}
+
+/* --- narrow ------------------------------------------------------------- */
+
+@media (max-width: 40rem) {
+  .section-head,
+  .section-body { grid-template-columns: 1fr; }
+  .section-body { margin-top: 1.5rem; gap: 1.5rem; }
+  .section-body > * { grid-column: 1; }
+  .section-head .label { margin-bottom: 0.5rem; }
+  .items li { grid-template-columns: 1.75rem 1fr; }
+  .items .desc { grid-column: 2; }
+  .roles { columns: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
